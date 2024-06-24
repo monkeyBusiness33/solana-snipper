@@ -1,0 +1,122 @@
+import SettingBuy, { SettingBuyModel } from './schema/settingBuySchema';
+import SettingSell, { SettingSellModel } from './schema/settingSellSchema';
+//-------------------------BUY---------------------------
+// Create a new setting
+export async function createBuySetting(data: any): Promise<SettingBuyModel> {
+  try {
+    const newSetting = new SettingBuy(data);
+    const savedSetting = await newSetting.save();
+    return savedSetting;
+  } catch (error) {
+    console.error('Error creating setting:', error);
+    throw error;
+  }
+}
+
+// Get all settings
+export async function getBuyAllSettings(wallet: string): Promise<SettingBuyModel | null> {
+  try {
+    const settings = await SettingBuy.findOne({});
+    return settings ?? null; // Return null if settings are null
+  } catch (error) {
+    console.log('Error getting settings:', error);
+    throw error;
+  }
+} 
+export async function getBuySettings(): Promise<SettingBuyModel | null> {
+  try {
+    const settings = await SettingBuy.findOne({});
+    return settings ?? null; // Return null if settings are null
+  } catch (error) {
+    console.log('Error getting settings:', error);
+    throw error;
+  }
+}
+
+// Get setting by ID
+export async function getBuySettingById(id: string): Promise<SettingBuyModel | null> {
+  try {
+    const setting = await SettingBuy.findById(id);
+    return setting;
+  } catch (error) {
+    console.error(`Error getting setting with ID ${id}:`, error);
+    throw error;
+  }
+}
+
+// Update setting by ID
+export async function updateBuySettings(data: any): Promise<SettingBuyModel> {
+  try {
+
+    const updatedSetting = await SettingBuy.findOne({});
+    if (!updatedSetting) {
+      const newSetting = new SettingBuy(data);
+      const savedSetting = await newSetting.save();
+      return savedSetting;
+    } else {
+      const result = await SettingBuy.findOneAndUpdate({}, data, { new: true });
+      if (!result) {
+        throw new Error('Failed to update setting');
+      }
+      return result;
+    }
+  } catch (error) {
+    console.error('Error updating setting:', error);
+    throw error;
+  }
+}
+//-------------------------SELL---------------------------
+// Create a new setting
+export async function createSellSetting(data: any): Promise<SettingSellModel> {
+  try {
+    const newSetting = new SettingSell(data);
+    const savedSetting = await newSetting.save();
+    return savedSetting;
+  } catch (error) {
+    console.error('Error creating setting:', error);
+    throw error;
+  }
+}
+
+// Get all settings
+export async function getSellAllSettings(): Promise<SettingSellModel | null> {
+  try {
+    const settings = await SettingSell.findOne();
+    return settings ?? null; // Return null if settings are null
+  } catch (error) {
+    console.error('Error getting settings:', error);
+    throw error;
+  }
+}
+
+// Get setting by ID
+export async function getSellSettingById(id: string): Promise<SettingSellModel | null> {
+  try {
+    const setting = await SettingSell.findById(id);
+    return setting;
+  } catch (error) {
+    console.error(`Error getting setting with ID ${id}:`, error);
+    throw error;
+  }
+}
+
+// Update setting by ID
+export async function updateSellSettings(data: any): Promise<SettingSellModel> {
+  try {
+    const updatedSetting = await SettingSell.findOne({});
+    if (!updatedSetting) {
+      const newSetting = new SettingSell(data);
+      const savedSetting = await newSetting.save();
+      return savedSetting;
+    } else {
+      const result = await SettingSell.findOneAndUpdate({}, data, { new: true });
+      if (!result) {
+        throw new Error('Failed to update setting');
+      }
+      return result;
+    }
+  } catch (error) {
+    console.error('Error updating setting:', error);
+    throw error;
+  }
+}
