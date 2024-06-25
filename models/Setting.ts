@@ -13,6 +13,15 @@ export async function createBuySetting(data: any): Promise<SettingBuyModel> {
   }
 }
 
+export async function getAllSettings(): Promise<SettingBuyModel | null> {
+  try {
+    const settings = await SettingBuy.find({}, 'wallet walletAddress tokenAddress status investSolAmount totalProfit');
+    return settings as any;
+  } catch (error) {
+    console.log('Error getting settings:', error);
+    throw error;
+  }
+}
 // Get all settings
 export async function getBuyAllSettings(wallet: string): Promise<SettingBuyModel | null> {
   try {
@@ -22,7 +31,7 @@ export async function getBuyAllSettings(wallet: string): Promise<SettingBuyModel
     console.log('Error getting settings:', error);
     throw error;
   }
-} 
+}
 export async function getBuySettings(): Promise<SettingBuyModel | null> {
   try {
     const settings = await SettingBuy.findOne({});
@@ -48,13 +57,13 @@ export async function getBuySettingById(id: string): Promise<SettingBuyModel | n
 export async function updateBuySettings(data: any): Promise<SettingBuyModel> {
   try {
 
-    const updatedSetting = await SettingBuy.findOne({});
+    const updatedSetting = await SettingBuy.findOne({ wallet: data.wallet });
     if (!updatedSetting) {
       const newSetting = new SettingBuy(data);
       const savedSetting = await newSetting.save();
       return savedSetting;
     } else {
-      const result = await SettingBuy.findOneAndUpdate({}, data, { new: true });
+      const result = await SettingBuy.findOneAndUpdate({ wallet: data.wallet }, data, { new: true });
       if (!result) {
         throw new Error('Failed to update setting');
       }
