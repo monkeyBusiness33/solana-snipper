@@ -25,6 +25,7 @@ export const createNewWallet = async (req: Request, res: Response): Promise<void
 export const changeStatus = async (req: Request, res: Response): Promise<void> => {
   try {
     const data = req.body;
+    
     let wallet = await getWalletById(data.walletId);
 
     if (!wallet) {
@@ -34,6 +35,7 @@ export const changeStatus = async (req: Request, res: Response): Promise<void> =
 
     wallet.status = !wallet.status;
     const updatedWallet = await updateWallet(data.walletId, wallet);
+
     res.status(200).send(updatedWallet);
   } catch (error: any) {
     console.error("Error:", error);

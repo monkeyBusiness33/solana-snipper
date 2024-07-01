@@ -22,6 +22,35 @@ export async function getAllSettings(): Promise<SettingBuyModel | null> {
     throw error;
   }
 }
+
+export async function getwalletInfo(address: string): Promise<SettingBuyModel[] | []> {
+  try {
+    const settings = await SettingBuy.find({
+      $or: [
+        { tokenAddress: address },
+        { walletAddress: address }
+      ]
+    });
+    return settings as any;
+  } catch (error) {
+    console.log('Error getting settings:', error);
+    throw error;
+  }
+}
+export async function setwalletInfo(obj: any): Promise<SettingBuyModel | null> {
+  try {
+    const newData = {
+      ...obj,
+      status : !obj.status,
+    }
+    const settings = await SettingBuy.findByIdAndUpdate(obj._id, newData, { new: true });
+    return settings as any;
+  } catch (error) {
+    console.log('Error getting settings:', error);
+    throw error;
+  }
+}
+
 // Get all settings
 export async function getBuyAllSettings(wallet: string): Promise<SettingBuyModel | null> {
   try {
@@ -57,7 +86,14 @@ export async function getBuySettingById(id: string): Promise<SettingBuyModel | n
 export async function updateBuySettings(data: any): Promise<SettingBuyModel> {
   try {
 
-    const updatedSetting = await SettingBuy.findOne({ wallet: data.wallet });
+    let updatedSetting: any
+    if (data.tokenAddress) {
+      updatedSetting = await SettingBuy.findOne({ wallet: data.wallet, tokenAddress: data.tokenAddress });
+    }
+    if (data.walletAddress) {
+      updatedSetting = await SettingBuy.findOne({ wallet: data.wallet, walletAddress: data.walletAddress });
+    }
+
     if (!updatedSetting) {
       const newSetting = new SettingBuy(data);
       const savedSetting = await newSetting.save();

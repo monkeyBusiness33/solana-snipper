@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { getBuyAllSettings, getSellAllSettings, updateBuySettings, updateSellSettings, createBuySetting, getAllSettings, createSellSetting } from '../models/Setting';
 
 export const updateBuySetting = async (req: Request, res: Response): Promise<void> => {
+  
   try {
 
     const newData = {
@@ -17,7 +18,7 @@ export const updateBuySetting = async (req: Request, res: Response): Promise<voi
       yProfit: 30,
       yAmount: req.body.setting.yAmount,
       zAmount: req.body.setting.zAmount,
-      status: false,
+      status: true,
     };
 
     const result = await updateBuySettings(newData);

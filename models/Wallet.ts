@@ -1,5 +1,6 @@
 import mongoose, { Document } from 'mongoose';
 import Wallet, { WalletModel } from './schema/walletSchema'; // Assuming your schema is in a file named 'Wallet.ts'
+import SettingBuy, { SettingBuyModel } from './schema/settingBuySchema';
 
 // CREATE operation
 export const createWallet = async (walletData: any): Promise<WalletModel> => {
@@ -32,14 +33,26 @@ export const getAllWallets = async (): Promise<WalletModel[]> => {
 };
 
 // READ operation (Get wallet by ID)
-export const getWalletById = async (walletId: mongoose.Types.ObjectId): Promise<WalletModel | null> => {
+export const getWalletById = async (walletId: mongoose.Types.ObjectId): Promise<SettingBuyModel | null> => {
   try {
-    const wallet = await Wallet.findById(walletId);
+    const wallet = await SettingBuy.findById(walletId);
+
     return wallet;
   } catch (error: any) {
     throw new Error(`Error fetching wallet: ${error.message}`);
   }
 };
+
+// UPDATE operation
+export const updateWallet = async (walletId: mongoose.Types.ObjectId, newData: any): Promise<SettingBuyModel | null> => {
+  try {
+    const updatedWallet = await SettingBuy.findByIdAndUpdate(walletId, newData, { new: true });
+    return updatedWallet;
+  } catch (error: any) {
+    throw new Error(`Error updating wallet: ${error.message}`);
+  }
+};
+
 export const getWalletByKey = async (walletAddress: string): Promise<WalletModel | null> => {
   try {
     const wallet = await Wallet.findOne({ secretKey: walletAddress });
@@ -57,15 +70,7 @@ export const updateWalletInfo = async (walletId: string, newData: any): Promise<
     throw new Error(`Error updating wallet: ${error.message}`);
   }
 };
-// UPDATE operation
-export const updateWallet = async (walletId: mongoose.Types.ObjectId, newData: any): Promise<WalletModel | null> => {
-  try {
-    const updatedWallet = await Wallet.findByIdAndUpdate(walletId, newData, { new: true });
-    return updatedWallet;
-  } catch (error: any) {
-    throw new Error(`Error updating wallet: ${error.message}`);
-  }
-};
+
 
 // DELETE operation
 export const deleteWallet = async (walletId: mongoose.Types.ObjectId): Promise<WalletModel | null> => {
